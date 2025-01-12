@@ -1,0 +1,12 @@
+{
+    "$schema": "https://swc.rs/schema.json",
+    "minify": true,
+    "jsc": {
+        "minify": {
+            "mangle": true,
+            "compress": {
+                "unused": true
+            }
+        }
+    }
+}
