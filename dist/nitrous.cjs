@@ -1,9 +1,15 @@
 
+function $parcel$defineInteropFlag(a) {
+  Object.defineProperty(a, '__esModule', {value: true, configurable: true});
+}
+
 function $parcel$export(e, n, v, s) {
   Object.defineProperty(e, n, {get: v, set: s, enumerable: true, configurable: true});
 }
 
-$parcel$export(module.exports, "defineNitrous", function () { return $34ef62e549118b26$export$94e464f5235b694f; });
+$parcel$defineInteropFlag(module.exports);
+
+$parcel$export(module.exports, "default", function () { return $34ef62e549118b26$export$2e2bcd8739ae039; });
 class $8d960040d6aee23c$export$8b798890db6ddfa7 extends Error {
 }
 class $8d960040d6aee23c$export$9e533b70869ab88 extends $8d960040d6aee23c$export$8b798890db6ddfa7 {
@@ -108,7 +114,7 @@ class $31fe49aa2b69d749$export$1503f43ba49760aa extends $31fe49aa2b69d749$var$Ni
                 target: this.nitrous.target
             }
         });
-        const target = e.target.dataset['target'] ? this.nitrous.querySelector(e.target.dataset['target']) : null;
+        const target = e.target.dataset['target'] ? this.nitrous.root.querySelector(e.target.dataset['target']) : null;
         this.handleRequest(req, target).catch(console.error);
     }
 }
@@ -120,89 +126,129 @@ class $31fe49aa2b69d749$export$45eab262e9be2d6b extends $31fe49aa2b69d749$var$Ni
                 target: this.nitrous.target
             }
         });
-        const target = e.target.dataset['target'] ? this.nitrous.querySelector(e.target.dataset['target']) : null;
+        const target = e.target.dataset['target'] ? this.nitrous.root.querySelector(e.target.dataset['target']) : null;
         this.handleRequest(req, target).catch(console.error);
     }
 }
 
 
 
-function $34ef62e549118b26$export$94e464f5235b694f(name, { include: include = [
-    'a',
-    'area'
-], exclude: exclude = [], swapTitle: swapTitle = true } = {}) {
-    return class Nitrous extends HTMLElement {
-        static #_ = customElements.define(name, this);
-        static swapTitle = swapTitle;
-        _parser = new DOMParser();
-        _onClick = new (0, $31fe49aa2b69d749$export$1503f43ba49760aa)(this);
-        _onSubmit = new (0, $31fe49aa2b69d749$export$45eab262e9be2d6b)(this);
-        _include = include instanceof Array ? include.join(', ') : include;
-        _exclude = exclude instanceof Array ? exclude.join(', ') : exclude;
-        get include() {
-            return this._include;
-        }
-        set include(value) {
-            this._include = value instanceof Array ? value.join(',') : value;
-        }
-        get exclude() {
-            return this._exclude;
-        }
-        set exclude(value) {
-            this._exclude = value instanceof Array ? value.join(',') : value;
-        }
-        get target() {
-            return this.getAttribute('target') ?? '';
-        }
-        set target(value) {
-            this.setAttribute('target', value);
-        }
-        connectedCallback() {
-            this.register();
-        }
-        disconnectedCallback() {
-            this.unregister();
-        }
-        register(root = this) {
-            for (const el of root.querySelectorAll(this._include)){
-                if (el.matches(this._exclude)) continue;
-                switch(true){
-                    case el instanceof HTMLAnchorElement && el.dataset['nitrous'] !== 'false':
-                    case el instanceof HTMLAreaElement && el.dataset['nitrous'] !== 'false':
-                        el.addEventListener('click', this._onClick);
-                        break;
-                    case el instanceof HTMLFormElement && el.dataset['nitrous'] !== 'false':
-                        el.addEventListener('submit', this._onSubmit);
-                        break;
-                    default:
-                        continue;
-                }
+const $34ef62e549118b26$var$defaults = {
+    include: [
+        'a',
+        'area'
+    ],
+    exclude: [],
+    swapTitle: true
+};
+class $34ef62e549118b26$export$2e2bcd8739ae039 {
+    _parser = new DOMParser();
+    _onClick = new (0, $31fe49aa2b69d749$export$1503f43ba49760aa)(this);
+    _onSubmit = new (0, $31fe49aa2b69d749$export$45eab262e9be2d6b)(this);
+    _swapTitle;
+    _include;
+    _exclude;
+    root;
+    constructor(root, { include: include = $34ef62e549118b26$var$defaults.include, exclude: exclude = $34ef62e549118b26$var$defaults.exclude, swapTitle: swapTitle = $34ef62e549118b26$var$defaults.swapTitle } = {}){
+        this.root = root;
+        this._swapTitle = swapTitle;
+        this._include = include instanceof Array ? include.join(', ') : include;
+        this._exclude = exclude instanceof Array ? exclude.join(', ') : exclude;
+    }
+    get include() {
+        return this._include;
+    }
+    set include(value) {
+        this._include = value instanceof Array ? value.join(',') : value;
+    }
+    get exclude() {
+        return this._exclude;
+    }
+    set exclude(value) {
+        this._exclude = value instanceof Array ? value.join(',') : value;
+    }
+    get target() {
+        return this.root.getAttribute('target') ?? '';
+    }
+    set target(value) {
+        this.root.setAttribute('target', value);
+    }
+    destroy() {
+        this.unregister();
+    }
+    register(root = this.root) {
+        for (const el of root.querySelectorAll(this._include)){
+            if (el.matches(this._exclude)) continue;
+            switch(true){
+                case el instanceof HTMLAnchorElement && el.dataset['nitrous'] !== 'false':
+                case el instanceof HTMLAreaElement && el.dataset['nitrous'] !== 'false':
+                    el.addEventListener('click', this._onClick);
+                    break;
+                case el instanceof HTMLFormElement && el.dataset['nitrous'] !== 'false':
+                    el.addEventListener('submit', this._onSubmit);
+                    break;
+                default:
+                    continue;
             }
         }
-        unregister(root = this) {
-            for (const el of root.querySelectorAll(this._include)){
-                if (el.matches(this._exclude)) continue;
-                switch(true){
-                    case el instanceof HTMLAnchorElement && el.dataset['nitrous'] !== 'false':
-                    case el instanceof HTMLAreaElement && el.dataset['nitrous'] !== 'false':
-                        el.removeEventListener('click', this._onClick);
-                        break;
-                    case el instanceof HTMLFormElement && el.dataset['nitrous'] !== 'false':
-                        el.removeEventListener('submit', this._onSubmit);
-                        break;
-                    default:
-                        continue;
-                }
+    }
+    unregister(root = this.root) {
+        for (const el of root.querySelectorAll(this._include)){
+            if (el.matches(this._exclude)) continue;
+            switch(true){
+                case el instanceof HTMLAnchorElement && el.dataset['nitrous'] !== 'false':
+                case el instanceof HTMLAreaElement && el.dataset['nitrous'] !== 'false':
+                    el.removeEventListener('click', this._onClick);
+                    break;
+                case el instanceof HTMLFormElement && el.dataset['nitrous'] !== 'false':
+                    el.removeEventListener('submit', this._onSubmit);
+                    break;
+                default:
+                    continue;
             }
         }
-        swap(input, target = null) {
-            const dom = typeof input === 'string' ? this._parser.parseFromString(input, 'text/html') : input;
-            target ??= this.querySelector(this.target);
-            if (!target) throw new (0, $8d960040d6aee23c$export$8b798890db6ddfa7)(`Target '${this.target}' does not exist`);
-            target.replaceChildren(...Array.from(dom.body.childNodes).map((node)=>document.adoptNode(node)));
-            if (Nitrous.swapTitle) document.title = dom.title;
-        }
-    };
+    }
+    swap(input, target = null) {
+        const dom = typeof input === 'string' ? this._parser.parseFromString(input, 'text/html') : input;
+        target ??= this.root.querySelector(this.target);
+        if (!target) throw new (0, $8d960040d6aee23c$export$8b798890db6ddfa7)(`Target '${this.target}' does not exist`);
+        target.replaceChildren(...Array.from(dom.body.childNodes).map((node)=>document.adoptNode(node)));
+        if (this._swapTitle) document.title = dom.title;
+        this.register(target);
+    }
+    static define(base, options = {}) {
+        // @ts-expect-error 2322 2415
+        return class extends base {
+            _nitrous = new $34ef62e549118b26$export$2e2bcd8739ae039(this, options);
+            get include() {
+                return this._nitrous.include;
+            }
+            set include(value) {
+                this._nitrous.include = value;
+            }
+            get exclude() {
+                return this._nitrous.exclude;
+            }
+            set exclude(value) {
+                this._nitrous.exclude = value;
+            }
+            get target() {
+                return this._nitrous.target;
+            }
+            set target(value) {
+                this._nitrous.target = value;
+            }
+            register(root) {
+                this._nitrous.register(root);
+            }
+            unregister(root) {
+                this._nitrous.unregister(root);
+            }
+            swap(input, target = null) {
+                this._nitrous.swap(input, target);
+            }
+        };
+    }
 }
 
 

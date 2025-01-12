@@ -1,6 +1,7 @@
-import type { DelegatedEvent, HyperlinkElement, Nitrous } from './types';
+import type { DelegatedEvent, HyperlinkElement } from './types';
 import { NitrousResponseError } from './errors';
 import { NitrousFormRequest, NitrousHyperlinkRequest } from './requests';
+import Nitrous from './nitrous';
 
 abstract class NitrousRequestHandler {
     private _controller = new AbortController();
@@ -8,21 +9,24 @@ abstract class NitrousRequestHandler {
     constructor(
         protected readonly nitrous: Nitrous,
         private readonly timeout?: number,
-    ) {
-    }
+    ) {}
 
     abort(reason?: unknown): void {
         this._controller.abort(reason);
         this._controller = new AbortController();
     }
 
-    protected async handleRequest(req: Request, target: Element | null): Promise<void> {
-        const signal = !this.timeout
-            ? this._controller.signal
-            : AbortSignal.any([
-                AbortSignal.timeout(this.timeout),
+    protected async handleRequest(
+        req: Request,
+        target: Element | null,
+    ): Promise<void> {
+        const signal =
+            !this.timeout ?
                 this._controller.signal
-            ]);
+            :   AbortSignal.any([
+                    AbortSignal.timeout(this.timeout),
+                    this._controller.signal,
+                ]);
 
         const res = await fetch(req, {
             signal,
@@ -40,7 +44,10 @@ abstract class NitrousRequestHandler {
     }
 }
 
-export class NitrousClickListener extends NitrousRequestHandler implements EventListenerObject {
+export class NitrousClickListener
+    extends NitrousRequestHandler
+    implements EventListenerObject
+{
     handleEvent(e: DelegatedEvent<MouseEvent, HyperlinkElement>): void {
         e.preventDefault();
 
@@ -50,15 +57,19 @@ export class NitrousClickListener extends NitrousRequestHandler implements Event
             },
         });
 
-        const target = e.target.dataset['target']
-            ? this.nitrous.querySelector(e.target.dataset['target'])
-            : null;
+        const target =
+            e.target.dataset['target'] ?
+                this.nitrous.root.querySelector(e.target.dataset['target'])
+            :   null;
 
         this.handleRequest(req, target).catch(console.error);
     }
 }
 
-export class NitrousSubmitListener extends NitrousRequestHandler implements EventListenerObject {
+export class NitrousSubmitListener
+    extends NitrousRequestHandler
+    implements EventListenerObject
+{
     handleEvent(e: DelegatedEvent<SubmitEvent, HTMLFormElement>): void {
         e.preventDefault();
 
@@ -68,10 +79,11 @@ export class NitrousSubmitListener extends NitrousRequestHandler implements Even
             },
         });
 
-        const target = e.target.dataset['target']
-            ? this.nitrous.querySelector(e.target.dataset['target'])
-            : null;
-        
+        const target =
+            e.target.dataset['target'] ?
+                this.nitrous.root.querySelector(e.target.dataset['target'])
+            :   null;
+
         this.handleRequest(req, target).catch(console.error);
     }
 }

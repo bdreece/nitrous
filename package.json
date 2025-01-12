@@ -4,10 +4,8 @@
     "version": "0.1.0",
     "author": "Brian Reece <me@bdreece.dev>",
     "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/bdreece/nitrous.git"
-    },
+    "repository": "github:bdreece/nitrous",
+    "bugs": "https://github.com/bdreece/nitrous/issues",
     "type": "module",
     "source": "src/nitrous.ts",
     "main": "dist/nitrous.cjs",

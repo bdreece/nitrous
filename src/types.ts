@@ -1,8 +1,28 @@
 export type HyperlinkElement = HTMLAnchorElement | HTMLAreaElement;
 
-export type DelegatedEvent<E extends Event, T extends EventTarget> = E & { target: T };
+export type DelegatedEvent<E extends Event, T extends EventTarget> = E & {
+    target: T;
+};
 
-export interface Nitrous extends HTMLElement {
+export type RegisterFunction = {
+    (root?: ParentNode): void;
+};
+
+export type UnregisterFunction = {
+    (root?: ParentNode): void;
+};
+
+export type SwapFunction = {
+    (html: string, target?: Element | null): void;
+    (dom: Document, target?: Element | null): void;
+};
+
+export type Constructor<T> = {
+    new (): T;
+    prototype: T;
+};
+
+export type NitrousCustomElement<T extends HTMLElement> = T & {
     get include(): string;
     set include(value: string | string[]);
 
@@ -12,16 +32,7 @@ export interface Nitrous extends HTMLElement {
     get target(): string;
     set target(value: string);
 
-    register(root?: ParentNode): void;
-    unregister(root?: ParentNode): void;
-
-    swap(html: string, target?: Element | null): void;
-    swap(dom: Document, target?: Element | null): void;
-}
-
-export type NitrousConstructor = {
-    new(): Nitrous,
-    prototype: Nitrous,
-
-    swapTitle: boolean;
-}
+    register: RegisterFunction;
+    unregister: UnregisterFunction;
+    swap: SwapFunction;
+};
