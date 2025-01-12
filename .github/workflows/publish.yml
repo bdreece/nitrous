@@ -1,5 +1,3 @@
-name: Publish to GitHub Packages
-
 on:
   release:
     types: [published]
